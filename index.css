@@ -1,7 +1,6 @@
 
-#date-input {display:none;}
-.icon {height: 25px;width:25px;}
-.listCard, .listCard-complete {width:420px;height:500px;background:darkSlateGrey; color: white;perspective: 1000px; margin:50px;}
+
+.listCard, .listCard-complete, .listCard-complete-hidden, .listCard-complete-flipped {width:420px;height:500px;background:darkSlateGrey; color: white;perspective: 1000px; margin:25px;float:left;}
 
 
 /* This container is needed to position the front and back side */
@@ -19,6 +18,21 @@
 .listCard-complete .listCard-inner {
   transform: rotateY(180deg);
 }
+.listCard-complete-hidden .listCard-inner {
+  transform: rotateY(180deg);
+}
+.listCard-complete-flipped .listCard-inner{
+  transform:rotateY(0deg)
+}
+.listCard-complete{
+overflow:hidden;
+transition:height 1s;}
+.listCard-complete-hidden{
+  height:400px;
+opacity:0.5;
+overflow:hidden;
+transition:opacity 1s,height 1s;
+}
 
 
 /* Position the front and back side */
@@ -30,23 +44,58 @@
 
 }
 
-
+.blur{opacity:0.2;
+  transition: opacity 0.5s;
+}
 /* Style the back side */
 .listCard-back {
   background-image: url(https://images.unsplash.com/photo-1542736705-53f0131d1e98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80);background-position: center;background-size: cover;
   transform: rotateY(180deg);
 }
 
+.listCard-back h2 {
+  padding:0 5px;
+  margin-top:0;
+    margin-bottom:0;
+}
+.listCard-front h2 {
+  padding:0 5px;
+  margin-top:0;
+}
+.calBanner{text-align:center;background-color: black;}
+.complete-label {background-color:grey;margin:0;padding:10px;}
+.complete-label div {margin: 5px 20px;}
+#date-input {display:none;}
+.icon {height:25px;width:25px;background-color:white;}
+.list-icon {height:30px;width:30px;background-color:white;}
+.list-icon-tooltip {visibility:hidden;font-size:14px;position:absolute;left:-200px;background-color: black;}
+.list-icon-container{position:absolute;left:360px;top:450px;width:50px;height:50px;}
+}
+.list-icon-container:hover {}
+.list-icon-container:hover .list-icon-tooltip {visibility: visible;}
+.list-header-btn{position:absolute;left:350px;}
+#no-date-button{position:absolute;top:-100px;left:0;background-color:white;width:200px;text-align:center;font-size: 1em;padding:10px;}
+#calendar {margin-left:100px;position:fixed;z-index:5;background-color:darkSlateGrey;color:white;padding:0 25px 25px;width:800px;margin-top:-10px;margin-bottom:10px; max-height:80%;overflow-y: auto;
+transition: margin-top 0.5s
+}
 
+
+#header{position:fixed;top:0px;width:100%;background-color:rgb(200,225,250);margin:0;padding:10px;z-index: 6;}
+.header-btn {display:inline-block;background-color:white;padding:5px;margin:1px 10px;border-radius: 10px;}
+.listCard-header {background: black; text-align: center;font-size:1.5em;font-weight:bold;padding:10px;}
+
+#main{padding:30px 5px;}
+
+#add-list-form{display:inline-block;font-size: 1.5 em;}
 .listCard ul {list-style: none;margin:0 auto;padding:0px;max-height:400px;max-height:400px;overflow-y:auto;}
 .listCard-complete ul {
 display:none;
 }
-li.complete{opacity:0.7;}
-li.hide{display:none;}
+li.complete{opacity:0.7;display:none;}
+li.complete-show{opacity:0.7;}
+.hide{display:none;}
 li {margin: 10px; color: black;font-size: 1.2em;background:white;display:flex;flex-direction: row;flex:1;align-content: space-between;padding:5px;}
 .task_title {margin:5px 10px;flex:1;font-size:0.8em;}
 .date{display:inline-block;flex-grow: 0;font-size:0.8em;}
 .remove{display:inline-block;flex-grow:0;height:25px;margin-left:10px;}
 li input[type="checkbox"] {width:25px;height:25px}
-h2 {background: black; text-align: center;}

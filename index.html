@@ -10,18 +10,30 @@
   <body>
     <script src="https://unpkg.com/js-datepicker"></script>
     <script src="moment.js"></script>
+    <script src="./helpers.js"></script>
     <script src="./adapter.js"></script>
 
     <script src="./index.js"></script>
-
   <div id=header>
     <input id="date-input" type="text" placeholder="set date">
+
+    <div id='no-date-button'> <button data-action='no-date'>No due_date</button></div>
+    <div class='header-btn'>
+      Make a new list:
     <form id='add-list-form' data-action='add-list'>
-      <input id='list-input'  name="list[title]" required>
+      <input id='list-input'  name="list[title]" placeholder="enter list title" required>
     <button type='submit'>Create List</button>
     </form>
-
-</div>
+    </div>
+    <span class="header-btn" data-action="show-cal">View Scheduled Tasks</span><span header-btn data-action='show-completed'  class='header-btn'> Show Completed Lists</span>
+    <select id='change-user' class='header'>
+    <option value='2' selected> Skylar</option>
+    <option value='3'> Demo User </option>
+    <option value='4'> Demo User2 </option>
+    </select>
+  </div>
+  <div id='calendar'>
+  </div>
   <div id=main>
   </div>
   </body>

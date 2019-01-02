@@ -55,8 +55,14 @@ function Adapter(baseURL){
 
   }
   function get(userId){
-    return fetch(`${baseURL}/users/${userId/lists}`)
+    return fetch(`${baseURL}/users/${userId}/lists`)
     .then((resp)=> resp.json())
+  }
+
+  function deleteList(listId){
+   return fetch(`${baseURL}/lists/${listId}`, {
+     method: "DELETE"
+   })
   }
   return {
     get: get,
@@ -64,7 +70,7 @@ function Adapter(baseURL){
     createList: createList,
     patchTask: patchTask,
     deleteTask: deleteTask,
-    patchList: patchList
-
+    patchList: patchList,
+    deleteList: deleteList
   }
 }
