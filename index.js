@@ -38,13 +38,12 @@ let showCompletedLists=false
     lists=data
     data.forEach((list)=>addTaskList(list))
   })}
-
   init();
 
   // adds new listCard to DOM
   function addTaskList(list){
     const listCard= document.createElement('div')
-    lists.push(list)
+    //lists.push(list);
     listCard.className="listCard"
     listCard.id=`list${list.id}`
     updateListCard(listCard,list)
@@ -202,11 +201,6 @@ let showCompletedLists=false
     })
     return tasks
   }
-  function closeCalendar (){
-  document.querySelector('#calendar').innerHTML=''
-  document.querySelector('#calendar').style.marginTop='-10px'
-  container.classList.remove('blur')}
-
   function renderCalendar(){
     container.classList.add('blur')
     document.querySelector('#calendar').style.marginTop='50px';
@@ -317,7 +311,7 @@ let showCompletedLists=false
        const id=event.target.dataset.id
        const list_id=event.target.dataset.list_id
 
-       const choice='yes'
+       const choice=confirm('Really delete this task?')
        if (choice){
          // remove task from list of tasks to display
         const foundList=findList(list_id)
@@ -339,8 +333,9 @@ let showCompletedLists=false
 
     }
     if(event.target.dataset.action==="close-cal"){
-      closeCalendar()
-
+      document.querySelector('#calendar').innerHTML=''
+      document.querySelector('#calendar').style.marginTop='-10px'
+      container.classList.remove('blur')
     }
     if (event.target.dataset.action=='show-completed'){
       if(event.target.dataset.toggle==='true'){
@@ -397,7 +392,9 @@ let showCompletedLists=false
       event.target.reset()
       adapter.createList(userId,{list:{user_id: userId, title: title}})
       .then((list)=>{
-        addTaskList(list)
+        lists.push(lists);
+        addTaskList(list);
+
       })
     }
 
