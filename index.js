@@ -16,7 +16,7 @@ if(calTask){renderTask(calTask,foundTask)}
 adapter.patchTask(id,{task:{due_date: dateVal}})
 }})
 // paramaters
-let userId=2;
+let userId=3;
 let showCompletedLists=false
 
 
@@ -26,7 +26,7 @@ let showCompletedLists=false
   pickerEl.style.display="none"
   const dateInput=document.querySelector('#date-input')
   const container=document.getElementById('main')
-
+  const welcomeMessage=document.getElementById('welcome')
   const adapter=Adapter('http://localhost:3000/api/v1')
   //const adapter=Adapter('192.168.0.11:3000/api/v1')
 
@@ -36,12 +36,13 @@ let showCompletedLists=false
   adapter.get(userId).then(data=> {
   //userId=data[0].user.id
     lists=data
-    data.forEach((list)=>addTaskList(list))
+    lists.length>0 ? data.forEach((list)=>addTaskList(list)) : ''
   })}
   init();
 
   // adds new listCard to DOM
   function addTaskList(list){
+    welcomeMessage.style.display='none';
     const listCard= document.createElement('div')
     //lists.push(list);
     listCard.className="listCard"
@@ -392,7 +393,7 @@ let showCompletedLists=false
       event.target.reset()
       adapter.createList(userId,{list:{user_id: userId, title: title}})
       .then((list)=>{
-        lists.push(lists);
+        lists.push(list);
         addTaskList(list);
 
       })
@@ -480,7 +481,38 @@ let showCompletedLists=false
       adapter.patchTask(id,{task:{title: title}})
     }
   }
+  function handleBlur(event){
+    console.log(event.target)
+    if (event.target.dataset.type==='list-header'){
+      event.preventDefault()
+      event.target.blur()
+      const list_id= event.target.dataset.list_id
+      const listCard=document.querySelector(`#list${list_id}`)
+      const title=event.target.textContent
+      adapter.patchList(list_id,{list:{user_id:userId,title: title}})
+      .then((list)=> {console.log(list);})
+    }
+    // if the user is editing a task's title
+    if (event.target.dataset.action==='edit-task-title'){
+      event.preventDefault()
+      const id= event.target.dataset.id
+      const title=event.target.textContent
+      // update title object in the list array
+      const foundTask=findTask(id)
+      foundTask.title=title
+      // rerender tasks in both views, since we don't know which view a user is editing from
+      const taskEl=document.querySelector(`#task${id}`)
+      renderTask(taskEl,foundTask)
+      const calTask=document.querySelector(`#task-cal${id}`)
+      if(calTask){renderTask(calTask,foundTask)}
+      //update the title in the database
+      adapter.patchTask(id,{task:{title: title}})
+    }
+  }
+
+
   document.addEventListener('click', handleClick)
   document.addEventListener('submit', handleSubmit)
   document.addEventListener('keydown',handleKeyDown)
+  document.addEventListener('focusout',handleBlur)
 })

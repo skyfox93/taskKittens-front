@@ -83,7 +83,7 @@ transition: margin-top 0.5s
 #header{position:fixed;top:0px;width:100%;background-color:rgb(200,225,250);margin:0;padding:10px;z-index: 6;}
 .header-btn {display:inline-block;background-color:white;padding:5px;margin:1px 10px;border-radius: 10px;}
 .listCard-header {background: black; text-align: center;font-size:1.5em;font-weight:bold;padding:10px;}
-
+.listCard-header h2{min-width:100px;min-height:20px;}
 #main{padding:30px 5px;}
 
 #add-list-form{display:inline-block;font-size: 1.5 em;}
