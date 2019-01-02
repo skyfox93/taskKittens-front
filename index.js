@@ -26,7 +26,6 @@ let showCompletedLists=false
   pickerEl.style.display="none"
   const dateInput=document.querySelector('#date-input')
   const container=document.getElementById('main')
-  const welcomeMessage=document.getElementById('welcome')
   const adapter=Adapter('http://localhost:3000/api/v1')
   //const adapter=Adapter('192.168.0.11:3000/api/v1')
 
@@ -34,14 +33,20 @@ let showCompletedLists=false
 
   function init(){
   adapter.get(userId).then(data=> {
-  //userId=data[0].user.id
+    renderWelcome();
     lists=data
-    lists.length>0 ? data.forEach((list)=>addTaskList(list)) : ''
+    if(lists.length>0){data.forEach((list)=>addTaskList(list))}
   })}
+
+  function renderWelcome(){
+    container.innerHTML= '<h2 id="welcome">Welcome! Add a list to get started</h2>'
+  }
+
   init();
 
   // adds new listCard to DOM
   function addTaskList(list){
+    const welcomeMessage=document.getElementById('welcome')
     welcomeMessage.style.display='none';
     const listCard= document.createElement('div')
     //lists.push(list);
@@ -510,9 +515,15 @@ let showCompletedLists=false
     }
   }
 
+  function switchUser(container){
+    container.innerHTML=''
+    userId=document.querySelector('#change-user').value
+    init();
+  }
 
   document.addEventListener('click', handleClick)
   document.addEventListener('submit', handleSubmit)
   document.addEventListener('keydown',handleKeyDown)
   document.addEventListener('focusout',handleBlur)
+  document.querySelector('#change-user').addEventListener('change',switchUser)
 })
