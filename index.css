@@ -45,7 +45,7 @@ transition:opacity 1s,height 1s;
 }
 
 .blur{opacity:0.2;
-  transition: opacity 0.5s;
+  transition: opacity 0.3s;
 }
 /* Style the back side */
 .listCard-back {
