@@ -207,6 +207,15 @@ let showCompletedLists=false
     })
     return tasks
   }
+  function renderQuickFind(){
+    debugger
+    const quickfindC=document.querySelector('#quickfind')
+    function listReducer(listHTML,list){return listHTML +`<li class='linkItem'><a href="#list${list.id}"> ${list.title}</a></li>`}
+
+    quickfindC.innerHTML=`<ul>${lists.reduce(listReducer,'')}</ul>`
+    quickfindC.style.marginTop='50px';
+  }
+
   function renderCalendar(){
     container.classList.add('blur')
     document.querySelector('#calendar').style.marginTop='50px';
@@ -335,7 +344,7 @@ let showCompletedLists=false
     }
       // if the user is toggling the calendar
     if(event.target.dataset.action==='show-cal'){
-      renderCalendar();
+      renderCalendar(container);
 
     }
     if(event.target.dataset.action==="close-cal"){
@@ -385,6 +394,9 @@ let showCompletedLists=false
       else{foundList.showCompleted=true;
 }
       updateListCard(listCard,foundList,foundList.showCompleted)
+    }
+    if(event.target.dataset.action==='quickfind'){
+    renderQuickFind();
     }
 
 

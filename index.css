@@ -75,7 +75,7 @@ transition:opacity 1s,height 1s;
 .list-icon-container:hover .list-icon-tooltip {visibility: visible;}
 .list-header-btn{position:absolute;left:350px;}
 #no-date-button{position:absolute;top:-100px;left:0;background-color:white;width:200px;text-align:center;font-size: 1em;padding:10px;}
-#calendar {margin-left:100px;position:fixed;z-index:5;background-color:darkSlateGrey;color:white;padding:0 25px 25px;width:800px;margin-top:-10px;margin-bottom:10px; max-height:80%;overflow-y: auto;
+#calendar, #quickfind {margin-left:100px;position:fixed;z-index:5;background-color:darkSlateGrey;color:white;padding:0 25px 25px;width:800px;margin-top:-10px;margin-bottom:10px; max-height:80%;overflow-y: auto;
 transition: margin-top 0.5s
 }
 
