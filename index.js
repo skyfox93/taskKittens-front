@@ -29,6 +29,7 @@ let showCompletedLists=false
   const adapter=Adapter('http://localhost:3000/api/v1')
   //const adapter=Adapter('192.168.0.11:3000/api/v1')
 
+
   let lists=[] // reassigned after first fetch
 
   function init(){
@@ -46,13 +47,14 @@ let showCompletedLists=false
 
   // adds new listCard to DOM
   function addTaskList(list){
+    list.showCompleted=true;
     const welcomeMessage=document.getElementById('welcome')
     welcomeMessage.style.display='none';
     const listCard= document.createElement('div')
     //lists.push(list);
     listCard.className="listCard"
     listCard.id=`list${list.id}`
-    updateListCard(listCard,list)
+    updateListCard(listCard,list,list.showCompleted)
     container.prepend(listCard)
     if(list.tasks.length>=1){determineFlip(list)}
   }
@@ -64,7 +66,7 @@ let showCompletedLists=false
       <div class="listCard-front" data-type='listFace'>
         <div class="listCard-header"><span data-type='list-header' data-list_id="${list.id}" contenteditable="true">${list.title}</span><span class='list-icon-container'>
         <img class='list-icon' data-list_id="${list.id}" data-action='toggle-task-visible' src='${showCompleteTasks ? './hide_icon.png': './show_icon.png'}'>
-        <span class='list-icon-tooltip'> Show/hide completed Tasks</span>
+        <span class='list-icon-tooltip'> ${showCompleteTasks ? 'hide' :'show'} completed Tasks</span>
         </span></div>
         <ul data-list_id="${list.id}"> ${listHTML} </ul> <form data-action='add-task' data-list_id="${list.id}"><input type="text" placeholder="enter a task" id="input${list.id}"><input type="submit" class="add-task" value="Add Task"> </form>
       </div>
@@ -175,25 +177,32 @@ let showCompletedLists=false
   }
 
   function renderTask(el,task,calView=false){
+    const list_id = task.list_id
+    const  foundList=findList(list_id);
+    const showComplete=foundList.showCompleted
+    // if the user set a due date, add it to the html, otherwise, add placeholder text
     // if the user set a due date, add it to the html, otherwise, add placeholder text
     let dateString=''
-
       // if it has a due date, convert it to a date, check if its overdue, and mark it it as overdue
     if(task.due_date){
       const date=new Date(task.due_date)
       dateString= date.toDateString().slice(0,10)
     }
     else{dateString='no due date'}
+      // check for title, asign the title
     const title= task.title ? task.title : 'enter text here'
+    // calendar view shows the list title as well as the task
     const listTitle= calView ? `<span>${task.listTitle}<span>` : ''
-    el.innerHTML=`
-    <input type="checkbox" data-action="complete" data-id="${task.id}" ${task.complete ? 'checked' : ''} data-list_id="${task.list_id}">
-    <img src="${task.priority ? 'staricon.png' :'./unstar.png'}" class="icon" data-action="star" data-id="${task.id}">
-    <span class="task_title" data-action="edit-task-title" data-id="${task.id}" contenteditable="true">${title}</span>
-    ${listTitle}
-    <span class="date" data-action="set_date" data-list="list${task.list_id}" data-id="${task.id}">${dateString}</span>
-    <button class="remove" data-action="remove-task" data-id="${task.id}" data-list_id='${task.list_id}'>X</button>
-        `;
+    //  task has a conditional class
+    el.className=task.complete ? (showComplete ? 'complete-show' : 'complete' ) : 'task'
+    el.dataset.id=task.id
+    el.id=calView ? 'task-cal'+task.id :'task'+task.id
+    el.innerHTML=`<input type="checkbox" data-action="complete" data-id="${task.id}" ${task.complete ? 'checked' : ''} data-list_id="${task.list_id}">
+      <img src="${task.priority ? 'staricon.png' :'./unstar.png'}" class="icon" data-action="star" data-id="${task.id}">
+      <span class="task_title" data-action="edit-task-title" data-id="${task.id}" contenteditable="true">${title}</span>
+      ${listTitle}
+      <span class="date" data-action="set_date" data-list="list${task.list_id}" data-id="${task.id}">${dateString}</span>
+      <button class="remove" data-action="remove-task" data-id="${task.id}" data-list_id='${task.list_id}'>X</button>`;
   }
   function flattenedTasks(){
     const tasks=[]
@@ -208,18 +217,19 @@ let showCompletedLists=false
     return tasks
   }
   function renderQuickFind(){
-    debugger
+    const selected= showCompletedLists ? lists : lists.filter((list)=>list.complete==='no')
     const quickfindC=document.querySelector('#quickfind')
-    function listReducer(listHTML,list){return listHTML +`<li class='linkItem'><a href="#list${list.id}"> ${list.title}</a></li>`}
+    container.classList.add('blur');
 
-    quickfindC.innerHTML=`<ul>${lists.reduce(listReducer,'')}</ul>`
+    function listReducer(listHTML,list){return listHTML +`<li class='linkItem' data-id="${list.id}" data-action='jump-to-list'> ${list.title}</li>`}
+
+    quickfindC.innerHTML=`<ul>${selected.reduce(listReducer,'')}</ul>`
     quickfindC.style.marginTop='50px';
   }
 
   function renderCalendar(){
     container.classList.add('blur')
     document.querySelector('#calendar').style.marginTop='50px';
-
     //  select the tasks with a due date
     let sorted=flattenedTasks().filter((task)=> !!task.due_date).filter((task)=>!task.complete)
     // group the tasks by date
@@ -240,7 +250,8 @@ let showCompletedLists=false
     function eventsReducer(eventsHTML,event){
       return eventsHTML + `<div>${event[0]}</div><ul>${reduceTasks(event[1],true)}</ul>`
     }
-    document.querySelector('#calendar').innerHTML="<div class='calBanner' data-action='close-cal'> Close </div>"+events.reduce(eventsReducer,'')
+    const calHTML=events.length<1 ? '<div class="task"> All of your tasks with due dates have been completed!</div>' : events.reduce(eventsReducer,'')
+    document.querySelector('#calendar').innerHTML="<div class='calBanner' data-action='close-cal'> Close </div>"+ calHTML
   }
     /*document.querySelector('#calendar').innerHTML=`<div data-action='close-cal'> Close </div><ul>${reduceTasks(sorted,true)}</ul>`
   }*/
@@ -258,9 +269,8 @@ let showCompletedLists=false
         foundTask.complete=false;}
       else {foundTask.complete=true;}
       // update html
-      listTask.classList.toggle('complete')
       renderTask(listTask,foundTask);
-      if(calTask){calTask.classList.toggle('complete');renderTask(calTask,foundTask,true)}
+      if(calTask){renderTask(calTask,foundTask,true)}
 
       // show the kitten if the list is complete
       const list_id = event.target.dataset.list_id
@@ -398,6 +408,18 @@ let showCompletedLists=false
     if(event.target.dataset.action==='quickfind'){
     renderQuickFind();
     }
+    if(event.target.dataset.action==='jump-to-list'){
+    container.classList.remove('blur')
+    const id=event.target.dataset.id
+    console.log('ID is', id)
+    const task=document.querySelector(`#list${id}`)
+    const rect=task.getBoundingClientRect();
+    let height=window.scrollY+rect.top
+    height-=50
+    const quickfindC=document.querySelector('#quickfind')
+    quickfindC.style.marginTop='-500px';
+    window.scrollTo(0,height)
+    }
 
 
 
@@ -425,10 +447,7 @@ let showCompletedLists=false
       else{input.value=''
         adapter.createTask({task:{list_id: list_id, title: title,note: null, due_date: null, priority: false, complete: false}})
         .then((task)=>{
-          console.log(task);
           const newLi=document.createElement('li')
-          newLi.dataset.id=task.id
-          newLi.id='task'+task.id
           newLi.className=task.complete ? 'task complete' : 'task'
           const list_id=event.target.dataset.list_id
           const ulEl=document.querySelector(`#list${list_id} ul`)
@@ -478,6 +497,8 @@ let showCompletedLists=false
       const list_id= event.target.dataset.list_id
       const listCard=document.querySelector(`#list${list_id}`)
       const title=event.target.textContent
+      const foundList=findList(list_id)
+      foundList.title=title
       adapter.patchList(list_id,{list:{user_id:userId,title: title}})
       .then((list)=> {console.log(list);})
     }
