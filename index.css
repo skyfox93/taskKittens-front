@@ -62,7 +62,7 @@ transition:opacity 1s,height 1s;
   padding:0 5px;
   margin-top:0;
 }
-.calBanner{text-align:center;background-color: black;}
+.calBanner{text-align:center;background-color: black;padding:5px;margin-bottom: 10px;}
 .complete-label {background-color:grey;margin:0;padding:10px;}
 .complete-label div {margin: 5px 20px;}
 #date-input {display:none;}
