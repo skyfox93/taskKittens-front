@@ -95,7 +95,8 @@ li.complete{opacity:0.7;display:none;}
 li.complete-show{opacity:0.7;}
 .hide{display:none;}
 li {margin: 10px; color: black;font-size: 1.2em;background:white;display:flex;flex-direction: row;flex:1;align-content: space-between;padding:5px;}
-.task_title {margin:5px 10px;flex:1;font-size:0.8em;}
-.date{display:inline-block;flex-grow: 0;font-size:0.8em;}
+.task_title {margin:5px 20px;flex:1;font-size:0.8em;padding:0;}
+.cal-date{font-size:1.1em;}
+.date,.task-listname{display:inline-block;flex-grow: 0;font-size:0.8em;margin:5px;}
 .remove{display:inline-block;flex-grow:0;height:25px;margin-left:10px;}
 li input[type="checkbox"] {width:25px;height:25px}

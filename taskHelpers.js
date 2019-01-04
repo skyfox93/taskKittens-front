@@ -19,10 +19,11 @@ function reduceTasks(list,calView=false,showComplete=false){
       dateString= date.toDateString().slice(0,10)
     }
     else{dateString='no due date'}
+    //if(calView){dateString='change due date'}
       // check for title, asign the title
     const title= task.title ? task.title : 'enter text here'
     // calendar view shows the list title as well as the task
-    const listTitle= calView ? `<span>${task.listTitle}<span>` : ''
+    const listTitle= calView ? `<span class="task-listname">${task.listTitle}<span>` : ''
     //  task has a conditional class
     const taskClass= task.complete ? (showComplete ? 'complete-show' : 'complete' ) : 'task'
     return taskHTML +
@@ -53,6 +54,8 @@ function renderTask(el,task,lists,calView=false){
     dateString= date.toDateString().slice(0,10)
   }
   else{dateString='no due date'}
+  if(calView){dateString='change due date'}
+
     // check for title, asign the title
   const title= task.title ? task.title : 'enter text here'
   // calendar view shows the list title as well as the task

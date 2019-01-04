@@ -42,7 +42,7 @@ function renderCalendar(lists,taskContainer){
    })
   // iterate through the array, creating html for the date and for the tasks
   function eventsReducer(eventsHTML,event){
-    return eventsHTML + `<div>${event[0]}</div><ul>${reduceTasks(event[1],true)}</ul>`
+    return eventsHTML + `<div class='cal-date'> ${event[0]}<ul>${reduceTasks(event[1],true)}</ul></div>`
   }
   const calHTML=events.length<1 ? '<div class="task"> All of your tasks with due dates have been completed!</div>' : events.reduce(eventsReducer,'')
   document.querySelector('#calendar').innerHTML="<div class='calBanner' data-action='close-cal'> Close </div>"+ calHTML

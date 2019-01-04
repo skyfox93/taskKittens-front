@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const foundTask=findTask(id,lists)
     foundTask.due_date=dateVal
     renderTask(taskEl,foundTask,lists)
-    if(calTask){renderTask(calTask,foundTask,lists,true)}
+    if(calTask){renderCalendar(lists,container)}
     adapter.patchTask(id,{task:{due_date: dateVal}})
   }})
   const pickerEl=document.querySelector('.qs-datepicker') // the datepicker element
