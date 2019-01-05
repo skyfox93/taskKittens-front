@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', function(){
       if(lists.length>0){data.forEach((list)=>{
           welcomeMessage.style.display='none';addTaskList(list,container)
       })}
-    })
+    }).catch((resp)=>resp.json()).then((resp)=>console.log('json error',resp))
+
+    ///{function(resp){if(resp.statusText){alert(resp.statusText)}else {alert('could not connect to server.')}})
   }
 
   function renderWelcome(container){

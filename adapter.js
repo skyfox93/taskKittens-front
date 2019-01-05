@@ -8,7 +8,7 @@ function Adapter(baseURL){
       },
       body: JSON.stringify(data)
     })
-    .then((resp)=> resp.json())
+    .then((resp)=>resp.json())
 
   }
   function patchTask(task_id,data){
@@ -56,7 +56,7 @@ function Adapter(baseURL){
   }
   function get(userId){
     return fetch(`${baseURL}/users/${userId}/lists`)
-    .then((resp)=> resp.json())
+    .then((resp)=>{if(!resp.ok){throw (resp)} return resp.json()})
   }
 
   function deleteList(listId){
