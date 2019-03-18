@@ -9,9 +9,8 @@ document.addEventListener('DOMContentLoaded', function(){
   const noDueDate=document.getElementById('no-date-button') // displays under datepicker
   const dateInput=document.querySelector('#date-input') // invisible element to hold date input
   const container=document.getElementById('main') // holds listCards
-  const adapter=Adapter('http://localhost:3000/api/v1')
+  const adapter=Adapter('http://192.168.1.12:3001/api/v1')
   // establish datepicker instance. It submits a patch request when clicked.
-
   const picker=datepicker('#date-input',{ alwaysShow: true, onSelect: (instance, date) => {
     pickerEl.style.display="none";
     const id= dateInput.dataset.id
@@ -33,6 +32,12 @@ document.addEventListener('DOMContentLoaded', function(){
   ///// run on initialization//////////
 
   pickerEl.style.display="none"
+
+
+  function renderLogin(container){
+
+  }
+
   init()
 
   // misc helpers
@@ -44,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if(lists.length>0){data.forEach((list)=>{
           welcomeMessage.style.display='none';addTaskList(list,container)
       })}
-    }).catch((resp)=>resp.json()).then((resp)=>console.log('json error',resp))
+    })
 
     ///{function(resp){if(resp.statusText){alert(resp.statusText)}else {alert('could not connect to server.')}})
   }
@@ -247,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function(){
       adapter.createList(userId,{list:{user_id: userId, title: title}})
       .then((list)=>{
         lists.push(list);
-        addTaskList(list);
+        addTaskList(list,container);
 
       })
     }

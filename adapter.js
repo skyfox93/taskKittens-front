@@ -19,8 +19,7 @@ function Adapter(baseURL){
         'Accepts': 'application/json'
       },
       body: JSON.stringify(data)
-    })
-    .then((resp)=> resp.json())
+    }).then((resp)=> resp.json())
 
   }
   function deleteTask(taskId){
@@ -37,7 +36,7 @@ function Adapter(baseURL){
       },
       body: JSON.stringify(data)
     })
-    .then((resp)=> resp.json())
+    .then((resp)=> resp.json().then((json)=> {if(!resp.ok){ throw (json)} return json}))
 
   }
 
@@ -56,7 +55,7 @@ function Adapter(baseURL){
   }
   function get(userId){
     return fetch(`${baseURL}/users/${userId}/lists`)
-    .then((resp)=>{if(!resp.ok){throw (resp)} return resp.json()})
+    .then((resp)=>resp.json())
   }
 
   function deleteList(listId){
